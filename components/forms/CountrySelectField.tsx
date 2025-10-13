@@ -105,7 +105,7 @@ function CountrySelect({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-full p-0 bg-gray-800 border-gray-600"
+        className="w-(--radix-popover-trigger-width) p-0 bg-gray-800 border-gray-600"
         align="start"
       >
         <Command className="bg-gray-800">

@@ -9,6 +9,7 @@ import {
   PREFERRED_INDUSTRIES,
   RISK_TOLERANCE_OPTIONS,
 } from '@/lib/constants';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
 const SignUp = () => {
@@ -120,6 +121,18 @@ const SignUp = () => {
         >
           {isSubmitting ? 'Creating Account' : 'Start Your Inversting Journey'}
         </Button>
+
+        <div className="text-center">
+          <p className="text-sm text-gray-500">
+            Already have an account?
+            <Link
+              href="/sign-in"
+              className="ml-2 font-medium text-yellow-500 hover:underline"
+            >
+              Sign In
+            </Link>
+          </p>
+        </div>
       </form>
     </>
   );
