@@ -4,15 +4,20 @@ import CountrySelectField from '@/components/forms/CountrySelectField';
 import InputField from '@/components/forms/InputField';
 import SelectField from '@/components/forms/SelectField';
 import { Button } from '@/components/ui/button';
+import { signUpWithEmail } from '@/lib/actions/auth.action';
 import {
   INVESTMENT_GOALS,
   PREFERRED_INDUSTRIES,
   RISK_TOLERANCE_OPTIONS,
 } from '@/lib/constants';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 const SignUp = () => {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -33,9 +38,19 @@ const SignUp = () => {
 
   const onSubmit = async (data: SignUpFormData) => {
     try {
-      console.log(data);
+      const result = await signUpWithEmail(data);
+      if (!result.success) throw new Error(result.error);
+
+      router.push('/');
     } catch (error) {
       console.error(error);
+      toast.error('Sign uo failed', {
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Failed to create an account',
+        position: 'top-center',
+      });
     }
   };
 
@@ -60,10 +75,19 @@ const SignUp = () => {
           validation={{
             required: 'Email is required',
             pattern: {
-              value: /^\w+@\w+\.\w+$/,
-              message: 'Email address is required',
+              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+              message: 'Email is not valid',
             },
           }}
+        />
+        <InputField
+          name="password"
+          label="Password"
+          placeholder="Enter a strong password"
+          type="password"
+          register={register}
+          error={errors.password}
+          validation={{ required: 'Password is required', minLength: 8 }}
         />
         <div className="space-y-2">
           <CountrySelectField
@@ -77,14 +101,14 @@ const SignUp = () => {
             Helps us show market data and news relevant to you.
           </p>
         </div>
-        <InputField
-          name="password"
-          label="Password"
-          placeholder="Enter a strong password"
-          type="password"
-          register={register}
-          error={errors.password}
-          validation={{ required: 'Password is required', minLength: 8 }}
+        <SelectField
+          name="investmentGoals"
+          label="Investment Goals"
+          placeholder="Select your investment goal"
+          options={INVESTMENT_GOALS}
+          control={control}
+          error={errors.investmentGoals}
+          required
         />
         <SelectField
           name="riskTolerance"
@@ -93,15 +117,6 @@ const SignUp = () => {
           options={RISK_TOLERANCE_OPTIONS}
           control={control}
           error={errors.riskTolerance}
-          required
-        />
-        <SelectField
-          name="investmentGoals"
-          label="Investment Goals"
-          placeholder="Select your investment goal"
-          options={INVESTMENT_GOALS}
-          control={control}
-          error={errors.investmentGoals}
           required
         />
         <SelectField
