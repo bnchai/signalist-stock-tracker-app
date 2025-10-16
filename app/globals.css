@@ -455,6 +455,22 @@
   overflow: hidden !important;
 }
 
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-500/50 rounded-[4px];
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500/80;
+}
+
 /* Custom scrollbar that shows on hover */
 .scrollbar-hide-default {
   scrollbar-width: thin;
